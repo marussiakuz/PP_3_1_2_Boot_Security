@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Admin</title>
+</head>
+<body>
+<h1>Admin personal account</h1>
+
+<div class="position-absolute top-50 start-50 translate-middle">
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/admin/users">Users</a></li>
+      <li class="breadcrumb-item" aria-current="page"><a href="/user">Go to personal account</a></li>
+      <li class="breadcrumb-item" aria-current="page"><a th:href="@{/logout}">Log out</a></li>
+    </ol>
+  </nav>
+</div>
+
+</body>
+</html>
