@@ -4,6 +4,8 @@ target/
 
 mvnw.*
 
+.DS_Store
+
 .apt_generated
 .classpath
 .factorypath
