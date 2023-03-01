@@ -1,20 +1,14 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.demo.configs;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Component
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class PasswordEncoderMapper {
+@Configuration
+public class PasswordEncoderConfig {
 
-    final PasswordEncoder passwordEncoder;
-
-    @EncodedMapping
-    public String encode(String value) {
-        return passwordEncoder.encode(value);
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

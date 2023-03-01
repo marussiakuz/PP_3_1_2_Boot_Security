@@ -1,26 +1,30 @@
-insert into users (birthday, email, user_name, last_name, user_role) values ('1989-05-12', 'msk@gmail.com', 'karim', 'remeykov', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1980-01-30', 'piter@outlook.com', 'nikki', 'rusich', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1999-12-03', 'cat@yandex.ru', 'vasya', 'vasin', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('2005-05-01', 'free@mail.ru', 'evrey', 'russ', 'ADMIN');
-insert into users (birthday, email, user_name, last_name, user_role) values ('2000-04-04', 'yaya@gmail.com', 'mark', 'familiev', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1995-01-07', 'netut@yandex.ru', 'hululu', 'martirosyan', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1990-07-12', 'prosto@mail.ru', 'helen', 'genkova', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1969-09-20', 'vmesto@gmail.com', 'alex', 'cattov', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1980-11-28', 'zachem@yandex.ru', 'fedya', 'fedin', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1988-12-06', 'kukubarash@mail.ru', 'frik', 'usov', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1986-10-09', 'time@gmail.com', 'neon', 'fioletov', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1986-01-11', 'bez@mail.ru', 'armen', 'menov', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1994-09-21', 'e@yandex.ru', 'marsel', 'frantsuzov', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('2006-07-29', 'letto@outlook.com', 'lusya', 'lusikova', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('2000-05-22', 'zzzz@gmail.com', 'obama', 'blackov', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('2001-03-17', 'truba@yandex.ru', 'trump', 'trumpov', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1999-08-30', 'freddy@gmail.com', 'unknown', 'dvortsov', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1990-01-04', 'fro@yandex.ru', 'petya', 'petin', 'REGISTERED');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1982-04-01', 'gm@mail.ru', 'limon', 'apelsinov', 'GUEST');
-insert into users (birthday, email, user_name, last_name, user_role) values ('1963-01-05', 'java@gmail.com', 'nik', 'nikov', 'GUEST');
+insert into roles (role_name) values ('ROLE_ADMIN');
+insert into roles (role_name) values ('ROLE_USER');
 
+insert into users (age, email, user_name, last_name, user_password) values (30, 'admin@gmail.com', 'admin', 'adminskii', '$2a$10$7mbnp8pNOBQFngPN/CdDT.H/eMJ4zfjorglwChXNilCtOF0M14Es6');
+insert into users (age, email, user_name, last_name, user_password) values (50, 'user@gmail.com', 'user', 'userevich', '$2a$10$8mOVqDFoLGqE9wHd/FnrV.fF1i7eQb9txn2pLkRMbmtLrsDbTXysu');
+insert into users (age, email, user_name, last_name, user_password) values (20, 'msk@gmail.com', 'karim', 'remeykov', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (22, 'piter@outlook.com', 'nikki', 'rusich', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (54, 'cat@yandex.ru', 'vasya', 'vasin', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (36, 'free@mail.ru', 'evrey', 'russ', 'ADMIN');
+insert into users (age, email, user_name, last_name, user_password) values (31, 'yaya@gmail.com', 'mark', 'familiev', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (18, 'netut@yandex.ru', 'hululu', 'martirosyan', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (23, 'prosto@mail.ru', 'helen', 'genkova', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (55, 'vmesto@gmail.com', 'alex', 'cattov', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (63, 'zachem@yandex.ru', 'fedya', 'fedin', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (27, 'kukubarash@mail.ru', 'frik', 'usov', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (33, 'time@gmail.com', 'neon', 'fioletov', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (44, 'bez@mail.ru', 'armen', 'menov', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (33, 'e@yandex.ru', 'marsel', 'frantsuzov', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (37, 'letto@outlook.com', 'lusya', 'lusikova', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (41, 'zzzz@gmail.com', 'obama', 'blackov', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (47, 'truba@yandex.ru', 'trump', 'trumpov', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (44, 'freddy@gmail.com', 'unknown', 'dvortsov', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (32, 'fro@yandex.ru', 'petya', 'petin', 'REGISTERED');
+insert into users (age, email, user_name, last_name, user_password) values (19, 'gm@mail.ru', 'limon', 'apelsinov', 'GUEST');
+insert into users (age, email, user_name, last_name, user_password) values (17, 'java@gmail.com', 'nik', 'nikov', 'GUEST');
 
-
-
-
+insert into users_roles (user_id, role_id) values (1, 1);
+insert into users_roles (user_id, role_id) values (1, 2);
+insert into users_roles (user_id, role_id) values (2, 2);
 

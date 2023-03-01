@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -13,10 +14,13 @@
 </head>
 <body>
 <div class="container" th:with="ps = ${pageSize} ? ${pageSize} : 3, pn = ${pageNumber} ? ${pageNumber} : 0">
+    <div class="nav-item" style="float: right; margin-left: 5px">
+        <a th:href="@{/logout}" class="nav-link">Logout</a>
+    </div>
    <h1 style="text-align: center; margin-top: 50px; margin-bottom: 30px">Users: </h1>
     <select style="float: right; margin-left: 5px" id="limit" class="form-control-sm"
             th:name="pageSize"
-            th:onchange="'window.location.href = \'' + @{/users} + '?pageNumber=0&pageSize=\' + this.value ' ">
+            th:onchange="'window.location.href = \'' + @{/admin/users} + '?pageNumber=0&pageSize=\' + this.value ' ">
         <option th:if="${totalCount != 1}" th:value="1"  th:selected="1==${ps}">1</option>
         <option th:if="${totalCount != 3 && totalCount > 3}" th:value="3"  th:selected="3==${ps}">3</option>
         <option th:if="${totalCount != 5}" th:value="5"  th:selected="5==${ps}">5</option>
@@ -33,8 +37,8 @@
             <th th:id="firstName" scope="col">First name</th>
             <th th:id="lastName" scope="col">Last name</th>
             <th th:id="email" scope="col">Email</th>
-            <th th:id="birthday" scope="col">Birthday</th>
-            <th th:id="role" scope="col">Role</th>
+            <th th:id="age" scope="col">Age</th>
+            <th th:id="roleNames" scope="col">Role</th>
             <th scope="col"></th>
             <th scope="col"></th>
         </tr>
@@ -45,8 +49,8 @@
             <td th:id="'name_' + ${user.getId()}" th:text="${user.getFirstName()}"></td>
             <td th:id="'last_name_' + ${user.getId()}" th:text="${user.getLastName()}"></td>
             <td th:id="'email_' + ${user.getId()}" th:text="${user.getEmail()}"></td>
-            <td th:id="'birthday_' + ${user.getId()}" th:text="${#dates.format(user.getBirthday(), 'dd.MM.yyyy')}"></td>
-            <td th:id="'role_' + ${user.getId()}" th:text="${user.getRole()}"></td>
+            <td th:id="'age_' + ${user.getId()}" th:text="${user.getAge()}"></td>
+            <td th:id="'roles_' + ${user.getId()}" th:text="${user.getRoles()}"></td>
             <td><button th:id="'edit_' + ${user.getId()}" type="button" class="btn btn-warning btn-sm"
                         th:attr="onclick=|updateUserInfo(${user.getId()}, ${ps}, ${pn})|" >Edit</button></td>
             <td><button th:id="'delete_' + ${user.getId()}" type="button" class="btn btn-danger btn-sm"
@@ -60,7 +64,7 @@
             class="pagination pagination-sm justify-content-center">
             <li th:each="i : ${#numbers.sequence(0, (totalCount % ps == 0 ? totalCount / ps - 1 : totalCount / ps))}"
                 th:class="${i == pn} ? 'page-item disabled' : 'page-item'">
-                <a class="page-link" th:onclick="'window.location.href = \'' + @{http://localhost:8080/users?(pageNumber=${i},pageSize=${ps})} + '\''"
+                <a class="page-link" th:onclick="'window.location.href = \'' + @{http://localhost:8080/admin/users?(pageNumber=${i},pageSize=${ps})} + '\''"
                    th:text="${i + 1}"></a>
             </li>
         </ul>
@@ -80,28 +84,25 @@
                 <label for="inputEmailNew">Email</label>
                 <input type="text" class="form-control" id="inputEmailNew" placeholder="Email">
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-3" style="padding: 0px 10px">
-                <label>Birthday</label>
-                <div class="form-row">
-                    <input type="date" class="form-control" id="inputBirthdayNew">
-                </div>
+            <div class="form-group col-md-6">
+                <label for="inputAgeNew">Age</label>
+                <input type="number" class="form-control" id="inputAgeNew" min="1" max="120">
             </div>
-        </div>
-        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputPasswordNew">Password</label>
+                <input type="password" class="form-control" id="inputPasswordNew">
+            </div>
             <div class="form-group col-md-3" style="padding: 0px 10px">
                 <label for="inputRoleNew">Role</label>
-                <select id="inputRoleNew" class="form-control">
-                    <option selected>Guest</option>
-                    <option>Registered</option>
-                    <option>Admin</option>
+                <select class="select form-control" multiple data-mdb-clear-button="true" id="inputRoleNew">
+                    <option value="ROLE_ADMIN">ADMIN</option>
+                    <option value="ROLE_USER">USER</option>
                 </select>
             </div>
+            <button type="button" th:attr="onclick=|createUser(${ps}, ${pn})|" class="btn btn-success">
+                Create
+            </button>
         </div>
-        <button type="button" th:attr="onclick=|createUser(${ps}, ${pn})|" class="btn btn-success">
-            Create
-        </button>
     </form>
 </div>
 
@@ -110,7 +111,7 @@
         savePagination(pageSize, pageNumber);
 
         $.ajax({
-            url: `http://localhost:8080/users/${id}`,
+            url: `http://localhost:8080/admin/users/${id}`,
             type: 'DELETE',
             success: function reload(){location.reload();}
         });
@@ -123,11 +124,22 @@
         body.firstName = document.getElementById("inputNameNew").value;
         body.lastName = document.getElementById("inputLastNameNew").value;
         body.email = document.getElementById("inputEmailNew").value;
-        body.role = document.getElementById("inputRoleNew").value.toUpperCase();
-        body.birthday = new Date(document.getElementById("inputBirthdayNew").value).getTime();
+        body.age = document.getElementById("inputAgeNew").value;
+        body.password = document.getElementById("inputPasswordNew").value;
+
+        let options = document.getElementById("inputRoleNew").options;
+        let roles = [];
+
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                roles.push(options[i].value);
+            }
+        }
+
+        body.roleNames = roles.join(",");
 
         $.ajax({
-            url: `http://localhost:8080/users`,
+            url: `http://localhost:8080/admin/users`,
             type: 'POST',
             data: JSON.stringify(body),
             contentType: 'application/json',
@@ -148,18 +160,25 @@
         savePagination(pageSize, pageNumber);
 
         for (let i = 0; i < document.getElementsByTagName("btn btn-warning btn-sm").length; i++) {
-            if (document.getElementsByClassName("btn btn-warning btn-sm").item(i).id == "edit_" + id) continue
+            if (document.getElementsByClassName("btn btn-warning btn-sm").item(i).id === "edit_" + id) continue
             document.getElementById("edit_button" + id).disabled = true
         }
 
         for (let i = 0; i < document.getElementsByClassName("btn btn-danger btn-sm").length; i++) {
+            if (document.getElementsByClassName("btn btn-danger btn-sm").item(i).id === "delete_" + id) continue
             document.getElementsByClassName("btn btn-danger btn-sm").item(i).disabled = true
         }
 
         document.getElementById("edit_" + id).className = "btn btn-success btn-sm"
         document.getElementById("edit_" + id).innerText = "Save"
         document.getElementById("edit_" + id).onclick = function() {
-            saveUpdatedUser(id)
+            saveUpdatedUser(id);
+        };
+
+        document.getElementById("delete_" + id).className = "btn btn-danger btn-sm"
+        document.getElementById("delete_" + id).innerText = "Cancel"
+        document.getElementById("delete_" + id).onclick = function() {
+            location.reload();
         };
 
         let name = document.getElementById("name_" + id);
@@ -174,39 +193,51 @@
         email.contentEditable = true;
         email.innerHTML = `<input id="input_email_${id}" value=${email.textContent} placeholder=${email.textContent} type=\"text\" minLength=\"1\" maxlength=\"30\">`;
 
-        let role = document.getElementById("role_" + id);
-        let role_old = role.textContent;
+        let age = document.getElementById("age_" + id);
+        age.contentEditable = true;
+        age.innerHTML = `<input id="input_age_${id}" value=${age.textContent} placeholder=${age.textContent} type=\"number\" minLength=\"1\" maxlength=\"120\">`;
+
+        let role = document.getElementById("roles_" + id);
+        let role_old = role.textContent.split(" ");
         role.contentEditable = true;
-        role.innerHTML = `<select id="select_role_${id}" class="form-select">
-                <option id="GUEST" value="GUEST">GUEST</option>
-                <option id="REGISTERED" value="REGISTERED">REGISTERED</option>
-                <option id="ADMIN" value="ADMIN">ADMIN</option>
+        role.innerHTML = `<select id="select_role_${id}" class="form-select" multiple>
+                <option id="ADMIN" value="ROLE_ADMIN">ADMIN</option>
+                <option id="USER" value="ROLE_USER">USER</option>
                      </select>`
-        document.getElementById(role_old).selected = true;
+
+        for (let i = 0; i < role_old.length; i++) {
+            document.getElementById(role_old[i]).selected = true;
+        }
     }
 
     async function saveUpdatedUser(id) {
         document.getElementById("name_" + id).contentEditable = false;
         document.getElementById("last_name_" + id).contentEditable = false;
         document.getElementById("email_" + id).contentEditable = false;
-        document.getElementById("role_" + id).contentEditable = false;
+        document.getElementById("age_" + id).contentEditable = false;
+        document.getElementById("roles_" + id).contentEditable = false;
 
-        let updatedName = document.getElementById("input_name_" + id).value;
-        document.getElementById("name_" + id).innerHTML = `<td id="name_${id}">${updatedName}</td>`
+        let body = {};
+        body.firstName = document.getElementById("input_name_" + id).value;
+        body.lastName = document.getElementById("input_last_name_" + id).value;
+        body.email = document.getElementById("input_email_" + id).value;
+        body.age = document.getElementById("input_age_" + id).value;
 
-        let updatedLastName = document.getElementById("input_last_name_" + id).value;
-        document.getElementById("last_name_" + id).innerHTML = `<td id="last_name_${id}">${updatedLastName}</td>`
+        let options = document.getElementById("select_role_" + id).options;
+        let roles = [];
 
-        let updatedEmail = document.getElementById("input_email_" + id).value;
-        document.getElementById("email_" + id).innerHTML = `<td id="email_${id}">${updatedEmail}</td>`
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                roles.push(options[i].value);
+            }
+        }
 
-        let updatedRole = document.getElementById("select_role_" + id).value;
-        document.getElementById("role_" + id).innerHTML = `<td id="role_${id}">${updatedRole}</td>`
+        body.roleNames = roles.join(",");
 
         $.ajax({
-            url: `http://localhost:8080/users/${id}`,
+            url: `http://localhost:8080/admin/users/${id}`,
             type: 'PATCH',
-            data: rowToJSON(id),
+            data: JSON.stringify(body),
             contentType: 'application/json',
             success: function reload(){location.reload();}
         });

@@ -33,8 +33,7 @@ public abstract class UserMapper {
     @Mapping(target = "roles",
             expression = "java(roleService.getAllByName(java.util.Arrays.stream(userInDto.getRoleNames().split(\",\"))" +
                     ".collect(java.util.stream.Collectors.toSet())))")
-    @Mapping(target = "password",
-            expression = "java(passwordEncoder.encode(userInDto.getPassword()))")
+    @Mapping(target = "password", expression = "java(passwordEncoder.encode(userInDto.getPassword()))")
     public abstract User toUser(UserInDto userInDto);
 
     public abstract UserOutDto toDto(User user);
