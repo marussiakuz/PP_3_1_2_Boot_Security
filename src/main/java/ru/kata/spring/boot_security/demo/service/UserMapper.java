@@ -31,8 +31,8 @@ public abstract class UserMapper {
     }
 
     @Mapping(target = "roles",
-            expression = "java(roleService.getAllByName(java.util.Arrays.stream(userInDto.getRoleNames().split(\",\"))" +
-                    ".collect(java.util.stream.Collectors.toSet())))")
+            expression = "java(new java.util.HashSet(roleService.getAllByName(java.util.Arrays.stream(userInDto" +
+                    ".getRoleNames().split(\",\")).collect(java.util.stream.Collectors.toSet()))))")
     @Mapping(target = "password", expression = "java(passwordEncoder.encode(userInDto.getPassword()))")
     public abstract User toUser(UserInDto userInDto);
 
@@ -42,8 +42,8 @@ public abstract class UserMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "roles",
-            expression = "java(roleService.getAllByName(java.util.Arrays.stream(userInDto.getRoleNames().split(\",\"))" +
-                    ".collect(java.util.stream.Collectors.toSet())))")
+            expression = "java(new java.util.HashSet(roleService.getAllByName(java.util.Arrays.stream(userInDto" +
+                    ".getRoleNames().split(\",\")).collect(java.util.stream.Collectors.toSet()))))")
     public abstract void updateUserFromDto(UserInDto userInDto, @MappingTarget User user);
 
     public static String map(Set<Role> roles) {
